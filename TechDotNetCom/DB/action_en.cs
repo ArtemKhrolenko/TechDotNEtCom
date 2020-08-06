@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataGridAX
 {
+    // стркуктура таблицы action_en в БД ЗП
     public class action_en
     {
         [Key]
