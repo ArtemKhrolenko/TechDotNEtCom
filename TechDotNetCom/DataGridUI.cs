@@ -46,9 +46,10 @@ namespace DataGridAX
             progressBarControl1.Properties.Minimum = 0;            
         }
 
-        
+
 
         #region Методы
+        // строка подключения передаваемая через СОМ-интерфейс
         public void getConnectionStringData(string Host, string Port, string Database, string Username, string Password)
         {
             SqlBuilder.Host = Host;
@@ -70,6 +71,7 @@ namespace DataGridAX
             SqlBuilder.Timeout = 50;
         }
 
+        // поолучаем данные из БД
         private List<ActionExtended> GetDateFromDB(DateTime selectedDateFrom, DateTime selectedDateTo, string[] dataStringArray)
         {
             List<ActionExtended> unionTable;
@@ -108,6 +110,7 @@ namespace DataGridAX
             return unionTable;
         }
 
+        // инициализации таблицы
         private async void InitGridCintrol()
         {
             gridControl2.DataSource = await Task.Run(() => GetDateFromDB(SelectedDateFrom, SelectedDateTo, DataStringArray));
