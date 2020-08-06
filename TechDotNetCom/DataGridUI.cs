@@ -118,7 +118,7 @@ namespace DataGridAX
             gridControl2.Refresh();
         }
 
-        private void testMerge()
+        private void testMerge() { }
         //Khrolenko
         private void TestMerge2()
         {
