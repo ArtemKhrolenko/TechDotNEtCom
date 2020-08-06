@@ -115,6 +115,11 @@ namespace DataGridAX
             gridControl2.Refresh();
         }
 
+
+        private void TestMerge2()
+        {
+
+        }
         #endregion
 
         #region Регистрация класса в реестре
