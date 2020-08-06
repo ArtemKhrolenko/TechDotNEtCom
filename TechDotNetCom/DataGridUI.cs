@@ -60,7 +60,8 @@ namespace DataGridAX
             SqlBuilder.Timeout = 50;
         }
 
-        // строка подключения по умолчанию
+
+        //Checking merge branches
         private void setDefaultConnectionStringData()
         {
             SqlBuilder.Host = "192.168.3.5";
