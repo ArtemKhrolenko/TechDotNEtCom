@@ -120,24 +120,6 @@ namespace DataGridAX
             gridControl2.Refresh();
         }
 
-        private void testMerge() { }
-        //Khrolenko
-        private void TestMerge2()
-        {
-            
-        }
-
-        private void testMergeKovalchuk()
-        {
-
-        }
-
-
-
-        private void MergeKhrolenko()
-        {
-
-        }
         #endregion
 
 
