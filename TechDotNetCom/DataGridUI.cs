@@ -15,6 +15,7 @@ using Npgsql;
 using DevExpress.Utils.Extensions;
 using DevExpress.XtraSplashScreen;
 using DXDBConvert.Lib;
+using DevExpress.XtraEditors;
 
 namespace DataGridAX
 {
@@ -131,7 +132,15 @@ namespace DataGridAX
 
         }
 
+
+
+        private void MergeKhrolenko()
+        {
+
+        }
         #endregion
+
+
 
         #region Регистрация класса в реестре
         [ComRegisterFunction()]
