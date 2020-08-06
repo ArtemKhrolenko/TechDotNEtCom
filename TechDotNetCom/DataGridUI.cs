@@ -116,6 +116,7 @@ namespace DataGridAX
         }
 
 
+        //Khrolenko
         private void TestMerge2()
         {
 
