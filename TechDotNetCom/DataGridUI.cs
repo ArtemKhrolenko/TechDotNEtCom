@@ -34,6 +34,7 @@ namespace DataGridAX
         public string[] DataStringArray { get; set; } = new string[] { "S11_D01_BGD01_SQO", "S11_D01_BGD01_SQC", "S11_D01_BGD01_VALVE", "S11_D01_BGD01" };
         #endregion
 
+        // конструктор
         public DataGridUI()
         {
             InitializeComponent();
