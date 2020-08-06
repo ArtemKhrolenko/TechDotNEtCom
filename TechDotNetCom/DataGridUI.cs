@@ -60,7 +60,7 @@ namespace DataGridAX
         }
 
 
-        //blablabla
+        //Checking merge branches
         private void setDefaultConnectionStringData()
         {
             SqlBuilder.Host = "192.168.3.5";
