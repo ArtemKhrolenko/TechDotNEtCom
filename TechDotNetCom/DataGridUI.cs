@@ -123,6 +123,11 @@ namespace DataGridAX
             
         }
 
+        private void testMergeKovalchuk()
+        {
+
+        }
+
         #endregion
 
         #region Регистрация класса в реестре
