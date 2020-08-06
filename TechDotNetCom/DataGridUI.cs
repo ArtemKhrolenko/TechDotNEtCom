@@ -59,6 +59,8 @@ namespace DataGridAX
             SqlBuilder.Timeout = 50;
         }
 
+
+        //blablabla
         private void setDefaultConnectionStringData()
         {
             SqlBuilder.Host = "192.168.3.5";
