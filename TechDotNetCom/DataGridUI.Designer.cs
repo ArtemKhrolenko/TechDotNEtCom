@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DataGridUI));
             this.gridControl2 = new DevExpress.XtraGrid.GridControl();
             this.gridView2 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
@@ -44,7 +46,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.progressBarControl1 = new DevExpress.XtraEditors.ProgressBarControl();
-            this.button1 = new System.Windows.Forms.Button();
+            this.svgImageCollection1 = new DevExpress.Utils.SvgImageCollection(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dateNavigator1)).BeginInit();
@@ -57,6 +59,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.timeEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeEdit2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.svgImageCollection1)).BeginInit();
             this.SuspendLayout();
             // 
             // gridControl2
@@ -223,22 +226,22 @@
             this.progressBarControl1.Size = new System.Drawing.Size(359, 20);
             this.progressBarControl1.TabIndex = 12;
             // 
-            // button1
+            // svgImageCollection1
             // 
-            this.button1.Location = new System.Drawing.Point(184, 52);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.svgImageCollection1.Add("summary", "image://svgimages/data/summary.svg");
+            this.svgImageCollection1.Add("DI", ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageCollection1.DI"))));
+            this.svgImageCollection1.Add("DO", ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageCollection1.DO"))));
+            this.svgImageCollection1.Add("AI", ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageCollection1.AI"))));
+            this.svgImageCollection1.Add("AO", ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageCollection1.AO"))));
+            this.svgImageCollection1.Add("ATV", ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageCollection1.ATV"))));
+            this.svgImageCollection1.Add("M", ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageCollection1.M"))));
+            this.svgImageCollection1.Add("VGD", ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("svgImageCollection1.VGD"))));
             // 
             // DataGridUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.progressBarControl1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
@@ -268,6 +271,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.timeEdit1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.timeEdit2.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.svgImageCollection1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -290,6 +294,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private DevExpress.XtraEditors.ProgressBarControl progressBarControl1;
-        private System.Windows.Forms.Button button1;
+        private DevExpress.Utils.SvgImageCollection svgImageCollection1;
     }
 }
