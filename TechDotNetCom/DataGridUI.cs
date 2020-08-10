@@ -87,7 +87,7 @@ namespace DataGridAX
         // строка подключения по умолчанию
         private void setDefaultConnectionStringData()
         {
-            SqlBuilder.Host = "192.168.1.131";
+            SqlBuilder.Host = "192.168.3.5";
             SqlBuilder.Port = Int32.Parse("5432");
             SqlBuilder.Database = "EventPicker";
             SqlBuilder.Username = "Al";
