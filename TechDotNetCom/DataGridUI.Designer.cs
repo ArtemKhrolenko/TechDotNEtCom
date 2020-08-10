@@ -37,6 +37,7 @@ namespace DataGridAX
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             DevExpress.XtraEditors.DateTimeRangeClientRuler dateTimeRangeClientRuler1 = new DevExpress.XtraEditors.DateTimeRangeClientRuler();
             DevExpress.XtraEditors.DateTimeRangeClientRuler dateTimeRangeClientRuler2 = new DevExpress.XtraEditors.DateTimeRangeClientRuler();
             this.rangeControl1 = new DevExpress.XtraEditors.RangeControl();
@@ -60,6 +61,7 @@ namespace DataGridAX
             this.button1 = new System.Windows.Forms.Button();
             this.progressBarControl1 = new DevExpress.XtraEditors.ProgressBarControl();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.svgImageCollection1 = new DevExpress.Utils.SvgImageCollection(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.rangeControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView2)).BeginInit();
@@ -74,6 +76,7 @@ namespace DataGridAX
             ((System.ComponentModel.ISupportInitialize)(this.timeEdit2.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).BeginInit();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.svgImageCollection1)).BeginInit();
             this.SuspendLayout();
             // 
             // rangeControl1
@@ -343,6 +346,7 @@ namespace DataGridAX
             ((System.ComponentModel.ISupportInitialize)(this.timeEdit2.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.progressBarControl1.Properties)).EndInit();
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.svgImageCollection1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,7 +381,7 @@ namespace DataGridAX
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button1;
         private DevExpress.XtraEditors.ProgressBarControl progressBarControl1;
-        private System.Windows.Forms.Panel panel1;        
-       
+        private System.Windows.Forms.Panel panel1;
+        private DevExpress.Utils.SvgImageCollection svgImageCollection1;
     }
 }

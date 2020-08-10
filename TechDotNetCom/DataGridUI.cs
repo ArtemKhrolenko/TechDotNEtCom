@@ -21,7 +21,6 @@ using DevExpress.XtraGrid;
 using System.Drawing;
 using DevExpress.Utils;
 using DevExpress.XtraEditors.Repository;
-using System.Drawing;
 
 namespace DataGridAX
 {
@@ -145,6 +144,10 @@ namespace DataGridAX
             gridControl2.DataSource = await Task.Run(() => GetDateFromDB(SelectedDateFrom, SelectedDateTo, DataStringArray));
             gridControl2.Refresh();
 
+
+            //Отменяем прорисовку ProgressBar'а
+            cancelBool = true;
+
             gridConditions();
         }
 
@@ -217,10 +220,6 @@ namespace DataGridAX
             };
             // ----------------------------------------------------
 
-            //Отменяем прорисовку ProgressBar'а
-            cancelBool = true;
-        }
-
             // Меняем цвет ячейки ---------------------------------
             gridView2.RowCellStyle += (sender, e) =>
             {
@@ -244,7 +243,7 @@ namespace DataGridAX
             };
             // ----------------------------------------------------
 
-            gridView2.EndDataUpdate();            
+            gridView2.EndDataUpdate();
         }
 
         #endregion
