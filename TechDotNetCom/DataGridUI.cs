@@ -16,6 +16,7 @@ using DevExpress.Utils.Extensions;
 using DevExpress.XtraSplashScreen;
 using DXDBConvert.Lib;
 using DevExpress.XtraEditors;
+using System.Drawing;
 
 namespace DataGridAX
 {
@@ -33,6 +34,13 @@ namespace DataGridAX
         // строка подключения к БД PG
         public NpgsqlConnectionStringBuilder SqlBuilder { get; set; } = new NpgsqlConnectionStringBuilder();
         public string[] DataStringArray { get; set; } = new string[] { "S11_D01_BGD01_SQO", "S11_D01_BGD01_SQC", "S11_D01_BGD01_VALVE", "S11_D01_BGD01" };
+
+        Progress<int> progress;
+        bool cancelBool;
+        #endregion
+
+        #region Поля
+        
         #endregion
 
         // конструктор
@@ -45,7 +53,15 @@ namespace DataGridAX
             dateNavigator1.DateTime = SelectedDateFrom;
             dateNavigator2.DateTime = SelectedDateTo;
             progressBarControl1.Properties.Maximum = 100;
-            progressBarControl1.Properties.Minimum = 0;            
+            progressBarControl1.Properties.Minimum = 0;
+            progressBarControl1.Width = 80;
+            progressBarControl1.Position = 100;
+
+            progress = new Progress<int>(percent =>
+            {
+                progressBarControl1.Position = percent;
+            });          
+
         }
 
 
@@ -66,7 +82,7 @@ namespace DataGridAX
         // строка подключения по умолчанию
         private void setDefaultConnectionStringData()
         {
-            SqlBuilder.Host = "192.168.3.5";
+            SqlBuilder.Host = "192.168.1.131";
             SqlBuilder.Port = Int32.Parse("5432");
             SqlBuilder.Database = "EventPicker";
             SqlBuilder.Username = "Al";
@@ -101,7 +117,7 @@ namespace DataGridAX
                     var unionTable2 = from a in dbEv.actionsEng
                                       join b in dbEv.actionsCodes on a.action_id equals b.action_id
                                       join c in dbEv.typesOfVars on b.type equals c.type_id
-                                      join d in dbEv.dcsEvents.Where(ev => ev.hash == hashCode && ev.time >= selectedDateFrom && ev.time <= selectedDateTo).OrderBy(x => x.pick_id).Skip(0)/*.Take(100)*/
+                                      join d in dbEv.dcsEvents.Where(ev => ev.hash == hashCode && ev.time >= selectedDateFrom && ev.time <= selectedDateTo).OrderBy(x => x.pick_id).Skip(0)
                                          on new { X1 = b.action, X2 = b.type } equals new { X1 = d.action, X2 = d.type }
                                       select new ActionExtended { VariableName = variableName, HashCode = d.hash, PickId = d.pick_id, TimeOfAction = d.time, Milliseconds = d.ms, ActionId = b.action_id, ActionType = b.type, ActionTypeDescription = c.description, Action = b.action, ActionDesc = a.description, ActionDescShort = a.description_short };
 
@@ -116,8 +132,15 @@ namespace DataGridAX
         // инициализации таблицы
         private async void InitGridCintrol()
         {
+            //Запускаем прорисовку ProgressBar'а
+            _ = Task.Run(() => ProgressBarUpdate(progress)).ContinueWith(o => MessageBox.Show("Data has been read successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information));
+
+            //Обнновляем DataGrid
             gridControl2.DataSource = await Task.Run(() => GetDateFromDB(SelectedDateFrom, SelectedDateTo, DataStringArray));
             gridControl2.Refresh();
+
+            //Отменяем прорисовку ProgressBar'а
+            cancelBool = true;
         }
 
         #endregion
@@ -176,31 +199,10 @@ namespace DataGridAX
         #region События элементов управления
         private void simpleButton2_Click(object sender, EventArgs e)
         {
-            //NpgsqlConnectionStringBuilder sqlBuilder = new NpgsqlConnectionStringBuilder();
 
-            //CancellationTokenSource cts = new CancellationTokenSource();
+            SelectedDateFrom = dateNavigator1.DateTime;
+            SelectedDateTo = dateNavigator2.DateTime;
 
-            //Task.Run(() =>
-            //{
-            //    while (!cts.IsCancellationRequested)
-            //    {
-            //        progressBarControl1.Increment(10);
-            //        if (progressBarControl1.Position >= progressBarControl1.Properties.Maximum)
-            //        {
-            //            progressBarControl1.Position = 0;
-            //        }
-
-            //        progressBarControl1.Update();
-            //        Thread.Sleep(150);
-            //    }
-            //}, cts.Token).ContinueWith(o => progressBarControl1.Position = 0);
-
-            //string[] variablesArray = new string[] { "S11_D01_BGD01_SQO", "S11_D01_BGD01_SQC", "S11_D01_BGD01_VALVE", "S11_D01_BGD01" };
-
-
-            SelectedDateFrom = dateNavigator1.DateTime/*.Add(timeEdit1.Time.TimeOfDay)*/;
-            SelectedDateTo   = dateNavigator2.DateTime/*.Add(timeEdit2.Time.TimeOfDay)*/;
-            
 
             if (SelectedDateFrom > SelectedDateTo)
             {
@@ -209,48 +211,55 @@ namespace DataGridAX
             }
 
             InitGridCintrol();
-        }           
+        }
 
         private void simpleButton3_Click(object sender, EventArgs e)
         {
             dateNavigator1.Visible = !dateNavigator1.Visible;
             dateNavigator2.Visible = false;
-           
+
         }
 
         private void simpleButton4_Click(object sender, EventArgs e)
         {
             dateNavigator2.Visible = !dateNavigator2.Visible;
-            dateNavigator1.Visible = false;            
+            dateNavigator1.Visible = false;
         }
 
         private void dateNavigator1_DateTimeCommit(object sender, EventArgs e)
         {
             DatePicker_1.Text = dateNavigator1.DateTime.ToString("dd.MM.yyyy");
             dateNavigator1.Visible = false;
+            (rangeControl1.Client as DateTimeRangeControlClient).Minimum = dateNavigator1.DateTime.AddDays(-10);
         }
 
         private void dateNavigator2_DateTimeCommit(object sender, EventArgs e)
         {
             DatePicker_2.Text = dateNavigator2.DateTime.ToString("dd.MM.yyyy");
             dateNavigator2.Visible = false;
+            (rangeControl1.Client as DateTimeRangeControlClient).Maximum = dateNavigator2.DateTime.AddDays(10);
         }
 
         private void dateNavigator1_DateTimeChanged(object sender, EventArgs e)
         {
             DatePicker_1.Text = dateNavigator1.DateTime.ToString("dd.MM.yyyy");
+            
+
+
         }
 
         private void dateNavigator2_DateTimeChanged(object sender, EventArgs e)
         {
             DatePicker_2.Text = dateNavigator2.DateTime.ToString("dd.MM.yyyy");
+            
+
         }
 
         private void timeSpanEdit1_EditValueChanged(object sender, EventArgs e)
         {
 
             timeEdit2.Time = dateNavigator2.DateTime = DateTime.Now;
-            timeEdit1.Time = dateNavigator1.DateTime = dateNavigator2.DateTime.Subtract(timeSpanEdit1.TimeSpan);          
+            timeEdit1.Time = dateNavigator1.DateTime = dateNavigator2.DateTime.Subtract(timeSpanEdit1.TimeSpan);
 
         }
 
@@ -266,16 +275,24 @@ namespace DataGridAX
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //progressBarControl1.Properties.Minimum += 2;            
-            //progressBarControl1.PerformStep();
-            progressBarControl1.Increment(5);            
-            if (progressBarControl1.Position >= progressBarControl1.Properties.Maximum)
-            {
-                progressBarControl1.Position = 0;                
-            }
-                
-            progressBarControl1.Update();
+            
+            //panel2.Left = panel1.Left;
+        }
 
+        //Метод для обновления прогрессбара
+        private void ProgressBarUpdate(IProgress<int> progress)
+        {
+            while (!cancelBool)
+            {
+                if (progressBarControl1.Left >= panel1.Width)
+                    progressBarControl1.Left = 0;
+                else
+                    progressBarControl1.Left += 30;
+                Thread.Sleep(50);
+            }
+
+            cancelBool = false;
+            progressBarControl1.Left = progressBarControl1.Width * -1;
 
         }
 
@@ -284,6 +301,12 @@ namespace DataGridAX
         private void gridControl2_Load(object sender, EventArgs e)
         {
             InitGridCintrol();
+        }
+
+        private void rangeControl1_RangeChanged(object sender, RangeControlRangeEventArgs range)
+        {
+            dateNavigator1.DateTime = (DateTime)rangeControl1.SelectedRange.Minimum;
+            dateNavigator2.DateTime = (DateTime)rangeControl1.SelectedRange.Maximum;
         }
     }
 }
