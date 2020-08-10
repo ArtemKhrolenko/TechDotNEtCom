@@ -16,6 +16,11 @@ using DevExpress.Utils.Extensions;
 using DevExpress.XtraSplashScreen;
 using DXDBConvert.Lib;
 using DevExpress.XtraEditors;
+using DevExpress.XtraGrid.Views.Grid;
+using DevExpress.XtraGrid;
+using System.Drawing;
+using DevExpress.Utils;
+using DevExpress.XtraEditors.Repository;
 using System.Drawing;
 
 namespace DataGridAX
@@ -27,6 +32,7 @@ namespace DataGridAX
     [ComSourceInterfaces(typeof(IDataGridAXEvents))]
     public partial class DataGridUI : UserControl, IDataGridAX
     {
+
         #region Свойства
 
         public DateTime SelectedDateFrom { get; set; } = DateTime.Now.AddDays(-1);
@@ -124,7 +130,7 @@ namespace DataGridAX
                     unionTable2.ForEach(el => unionTable.Add(el));
                     l++;
                 }
-                unionTable.Sort((x, y) => x.TimeOfAction.CompareTo(y.TimeOfAction));
+                unionTable.Sort((x, y) => x.PickId.CompareTo(y.PickId));
             }
             return unionTable;
         }
@@ -139,13 +145,109 @@ namespace DataGridAX
             gridControl2.DataSource = await Task.Run(() => GetDateFromDB(SelectedDateFrom, SelectedDateTo, DataStringArray));
             gridControl2.Refresh();
 
+            gridConditions();
+        }
+
+        private void gridConditions()
+        {
+            gridView2.BeginDataUpdate();
+
+            // прячем колонки -------------------------------------
+            gridView2.Columns["Id"].Visible = false;
+            gridView2.Columns["HashCode"].Visible = false;
+            gridView2.Columns["PickId"].Visible = false;
+            gridView2.Columns["Milliseconds"].Visible = false;
+            gridView2.Columns["Action"].Visible = false;
+            //gridView2.Columns["ActionId"].Visible = false;
+            gridView2.Columns["ActionType"].Visible = false;
+            gridView2.Columns["ActionTypeDescription"].Visible = false;
+            //gridView2.Columns["ActionDescShort"].Visible = false;
+            // ----------------------------------------------------
+
+
+            // отобрает картинки в ячейках ------------------------
+            var AItextEdit = new RepositoryItemTextEdit();
+            var AOtextEdit = new RepositoryItemTextEdit();
+            var DItextEdit = new RepositoryItemTextEdit();
+            var DOtextEdit = new RepositoryItemTextEdit();
+            var ATVtextEdit = new RepositoryItemTextEdit();
+            var VGDtextEdit = new RepositoryItemTextEdit();
+            var MtextEdit = new RepositoryItemTextEdit();
+
+            AItextEdit.ContextImageOptions.Image = svgImageCollection1.GetImage("AI");
+            AOtextEdit.ContextImageOptions.Image = svgImageCollection1.GetImage("AO");
+            DItextEdit.ContextImageOptions.Image = svgImageCollection1.GetImage("DI");
+            DOtextEdit.ContextImageOptions.Image = svgImageCollection1.GetImage("DO");
+            ATVtextEdit.ContextImageOptions.Image = svgImageCollection1.GetImage("ATV");
+            VGDtextEdit.ContextImageOptions.Image = svgImageCollection1.GetImage("VGD");
+            MtextEdit.ContextImageOptions.Image = svgImageCollection1.GetImage("M");
+
+            gridView2.CustomRowCellEdit += (sender, e) => {
+                GridView view = sender as GridView;
+                int _actionType = (int)view.GetRowCellValue(e.RowHandle, "ActionType");
+                if (e.Column.FieldName == "VariableName")
+                {
+                    switch (_actionType)
+                    {
+                        case (int)EditType.AI:
+                            e.RepositoryItem = AItextEdit;
+                            break;
+                        case (int)EditType.AO:
+                            e.RepositoryItem = AOtextEdit;
+                            break;
+                        case (int)EditType.DI:
+                            e.RepositoryItem = DItextEdit;
+                            break;
+                        case (int)EditType.DO:
+                            e.RepositoryItem = DOtextEdit;
+                            break;
+                        case (int)EditType.ATV:
+                            e.RepositoryItem = ATVtextEdit;
+                            break;
+                        case (int)EditType.VGD:
+                            e.RepositoryItem = VGDtextEdit;
+                            break;
+                        case (int)EditType.M:
+                            e.RepositoryItem = MtextEdit;
+                            break;
+                        default:                            
+                            break;
+                    }
+                }
+            };
+            // ----------------------------------------------------
+
             //Отменяем прорисовку ProgressBar'а
             cancelBool = true;
         }
 
+            // Меняем цвет ячейки ---------------------------------
+            gridView2.RowCellStyle += (sender, e) =>
+            {
+                GridView view = sender as GridView;
+                int _action = (int)view.GetRowCellValue(e.RowHandle, "Action");
+                if (e.Column.FieldName == "ActionDesc")
+                {
+                    // красным цветом
+                    if (_action == 9 || _action == 12 || _action == 13 || _action == 15 || _action == 41 || _action == 44 || _action == 45 || _action == 47 || _action == 69)
+                    {
+                        e.Appearance.BackColor = Color.IndianRed;
+                    }
+
+                    // желтым цветом
+                    if (_action == 5 || _action == 10 || _action == 11 || _action == 14 || _action == 38 || _action == 42 || _action == 43 || _action == 46 || _action == 100)
+                    {
+                        e.Appearance.BackColor = Color.Yellow;
+                    }
+                    //e.Appearance.TextOptions.HAlignment = _action == 3 ? HorzAlignment.Far : HorzAlignment.Near;
+                }
+            };
+            // ----------------------------------------------------
+
+            gridView2.EndDataUpdate();            
+        }
+
         #endregion
-
-
 
         #region Регистрация класса в реестре
         [ComRegisterFunction()]
@@ -302,6 +404,19 @@ namespace DataGridAX
         {
             InitGridCintrol();
         }
+
+        #region Enum
+        enum EditType : int
+        {
+            AI = 1,
+            AO = 2,
+            DI = 3,
+            DO = 4,
+            ATV = 5,
+            VGD = 6,
+            M = 7
+        }
+        #endregion
 
         private void rangeControl1_RangeChanged(object sender, RangeControlRangeEventArgs range)
         {
